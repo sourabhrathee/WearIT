@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="../static/style.css" type="text/css" />
+    <script
+      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      crossorigin="anonymous"
+    ></script>
+    <style>
+      body {
+        background-image: url("../static/bg_6.jpg");
+        background-size: cover;
+        background-repeat: no-repeat;
+        /*background-color: #cccccc;*/
+      }
+    </style>
+    <script>
+      $(document).ready(function () {
+        $("#company").change(function () {
+          var company = $("#company").val();
+          console.log(company);
+          // Make Ajax Request and expect JSON-encoded data
+          $.getJSON(
+            "http://127.0.0.1:1212/get_models" + "/" + company,
+            function (data) {
+              // Remove old options
+              $("#models").find("option").remove();
+
+              // Add new items
+              $.each(data, function (key, val) {
+                var option_item =
+                  '<option value="' + val + '">' + val + "</option>";
+                $("#models").append(option_item);
+              });
+            }
+          );
+        });
+      });
+    </script>
+    <title>WearIt</title>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#"><strong>WearIt</strong></a>
+        </div>
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item active">
+            <a href="{{ url_for('index') }}" class="navbar-link text-white mx-2"
+              >Static</a
+            >
+          </li>
+          <li class="nav-item active">
+            <a href="{{ url_for('RT') }}" class="navbar-link text-white mx-2"
+              >RealTime</a
+            >
+          </li>
+          <li class="nav-item active">
+            <a
+              href="{{ url_for('logout') }}"
+              class="navbar-link text-white mx-2"
+              >Logout</a
+            >
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <div class="container">
+      <form
+        class="form-inline mt-4"
+        action="http://127.0.0.1:5000/pred"
+        method="post"
+      >
+        <select name="tshirt" class="form-control mx-1" id="company">
+          <option value="0" selected="selected">Select a t-shirt</option>
+          <option value="1">Yellow t-shirt</option>
+          <option value="2">Blue t-shirt</option>
+          <option value="3">Orange t-shirt</option>
+          <option value="4">White t-shirt</option>
+        </select>
+        <button type="submit" class="btn btn-default mx-1">Try</button>
+      </form>
+      <div class="row">
+        <div class="col-md-3 mt-5">
+          <figure>
+            <img src="../static/newk_1.png" class="img-thumbnail" id="tnail" />
+            <figcaption>Yellow t-shirt</figcaption>
+          </figure>
+        </div>
+        <div class="col-md-3 mt-5">
+          <figure>
+            <img src="../static/blue.png" class="img-thumbnail" id="tnail" />
+            <figcaption>Blue t-shirt</figcaption>
+          </figure>
+        </div>
+        <div class="col-md-3 mt-5">
+          <figure>
+            <img src="../static/orange.png" class="img-thumbnail" id="tnail" />
+            <figcaption>Orange t-shirt</figcaption>
+          </figure>
+        </div>
+        <div class="col-md-3 mt-5">
+          <figure>
+            <img src="../static/white_1.png" class="img-thumbnail" id="tnail" />
+            <figcaption>White t-shirt</figcaption>
+          </figure>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-md-3"></div>
+        <div class="col-md-6 text-center">
+          <a href="{{ url_for('rtupload') }}">
+            <button
+              type="button"
+              class="btn btn-primary font-weight-bold py-2 px-5"
+            >
+              Upload your own
+            </button>
+          </a>
+        </div>
+        <div class="col-md-3"></div>
+      </div>
+    </div>
+  </body>
+</html>

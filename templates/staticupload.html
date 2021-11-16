@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="../static/style.css" type="text/css" />
+    <script
+      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      crossorigin="anonymous"
+    ></script>
+    <style>
+      body {
+        background-image: url("../static/bg_6.jpg");
+        background-size: cover;
+        background-repeat: no-repeat;
+        /*background-color: #cccccc;*/
+      }
+    </style>
+    <script>
+      $(document).ready(function () {
+        $("#company").change(function () {
+          var company = $("#company").val();
+          console.log(company);
+          // Make Ajax Request and expect JSON-encoded data
+          $.getJSON(
+            "http://127.0.0.1:1212/get_models" + "/" + company,
+            function (data) {
+              // Remove old options
+              $("#models").find("option").remove();
+
+              // Add new items
+              $.each(data, function (key, val) {
+                var option_item =
+                  '<option value="' + val + '">' + val + "</option>";
+                $("#models").append(option_item);
+              });
+            }
+          );
+        });
+      });
+    </script>
+    <title>WearIt</title>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#"><strong>WearIt</strong></a>
+        </div>
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item active">
+            <a href="{{ url_for('index') }}" class="navbar-link text-white mx-2"
+              >Static</a
+            >
+          </li>
+          <li class="nav-item active">
+            <a href="{{ url_for('RT') }}" class="navbar-link text-white mx-2"
+              >RealTime</a
+            >
+          </li>
+          <li class="nav-item active">
+            <a
+              href="{{ url_for('logout') }}"
+              class="navbar-link text-white mx-2"
+              >Logout</a
+            >
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <div class="container mt-5 mb-3">
+      <form
+        action="http://127.0.0.1:5000/s_upload"
+        method="POST"
+        enctype="multipart/form-data"
+      >
+        <div class="custom-file">
+          <input
+            type="file"
+            name="img_s"
+            class="custom-file-input"
+            id="customFile"
+            accept="image/*"
+            required
+          />
+          <label class="custom-file-label" for="customFile">Choose file</label>
+        </div>
+        <div class="text-center mt-4">
+          <button type="submit" class="btn btn-primary">Upload</button>
+        </div>
+      </form>
+    </div>
+    <script>
+      $(".custom-file-input").on("change", function () {
+        var fileName = $(this).val().split("\\").pop();
+        $(this)
+          .siblings(".custom-file-label")
+          .addClass("selected")
+          .html(fileName);
+      });
+    </script>
+  </body>
+</html>
